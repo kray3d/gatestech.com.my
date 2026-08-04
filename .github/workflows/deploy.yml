@@ -5,6 +5,11 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      clean_slate:
+        description: "Wipe server files first (removes anything not in this repo, e.g. injected/hacked files)"
+        type: boolean
+        default: false
 
 concurrency:
   group: ftp-deploy
@@ -29,6 +34,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ${{ secrets.FTP_SERVER_DIR }}
           local-dir: ./
+          dangerous-clean-slate: ${{ inputs.clean_slate == true }}
           exclude: |
             **/.git*
             **/.git*/**
